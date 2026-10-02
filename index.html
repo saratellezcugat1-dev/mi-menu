@@ -5,46 +5,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú Degustación Interactivo</title>
     <style>
-  /* Configuración del fondo general y texto */
-  body {
-    background-color: #f8f9fa; /* Fondo gris casi blanco, suave a la vista */
-    color: #212529;            /* Texto oscuro para buen contraste */
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
+        :root {
+            --bg-color: #0f0f11;
+            --card-bg: #1a1a1e;
+            --accent-gold: #e5c158;
+            --text-light: #f5f5f7;
+            --text-muted: #a0a0ab;
+            --border-color: #2e2e36;
+        }
 
-  /* Tarjetas o contenedores del menú */
-  .card, .menu-item, .container {
-    background-color: #ffffff; /* Fondo blanco puro para los elementos */
-    color: #212529;
-    border: 1px solid #e0e0e0;  /* Borde suave */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Sombra muy suave */
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-  }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  /* Títulos y encabezados */
-  h1, h2, h3 {
-    color: #1a1a1a;
-  }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
 
-  /* Subtítulos o descripciones */
-  p, .description {
-    color: #555555;
-  }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
 
-  /* Botones si los tienes */
-  button, .btn {
-    background-color: #007bff; /* Azul profesional */
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-</style>
+        .splash-screen {
+            padding: 30px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .splash-screen.hidden {
+            display: none;
+        }
+
+        .chef-avatar-container {
+            width: 100%;
+            max-width: 380px;
+            margin: 15px 0 25px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 8px 25px rgba(229, 193, 88, 0.25);
+            background-color: #24242a;
+        }
+
+        .chef-avatar-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .splash-title {
+            font-family: 'Georgia', serif;
+            color: var(--accent-gold);
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        .splash-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-enter {
+            background: linear-gradient(135deg, #e5c158, #b89228);
+            color: #0f0f11;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 193, 88, 0.4);
+        }
+
+        .menu-view {
+            padding: 30px 20px;
+            display: none;
+        }
+
+        .menu-view.active {
+            display: block;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .menu-header h1 {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+        }
+
+        .menu-header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .category-title {
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 22px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .menu-item {
+            background-color: #222228;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-name {
+            font-size: 0.98rem;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .item-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .menu-item.active .item-details {
+            max-height: 100px;
+            margin-top: 10px;
+        }
+
+        .btn-back {
+            display: block;
+            margin: 25px auto 0 auto;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
 
