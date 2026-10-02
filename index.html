@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Degustación Interactivo</title>
+    <style>
+        :root {
+            --bg-color: #0f0f11;
+            --card-bg: #1a1a1e;
+            --accent-gold: #e5c158;
+            --text-light: #f5f5f7;
+            --text-muted: #a0a0ab;
+            --border-color: #2e2e36;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .splash-screen {
+            padding: 30px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .splash-screen.hidden {
+            display: none;
+        }
+
+        .chef-avatar-container {
+            width: 100%;
+            max-width: 380px;
+            margin: 15px 0 25px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 8px 25px rgba(229, 193, 88, 0.25);
+            background-color: #24242a;
+        }
+
+        .chef-avatar-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .splash-title {
+            font-family: 'Georgia', serif;
+            color: var(--accent-gold);
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        .splash-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-enter {
+            background: linear-gradient(135deg, #e5c158, #b89228);
+            color: #0f0f11;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 193, 88, 0.4);
+        }
+
+        .menu-view {
+            padding: 30px 20px;
+            display: none;
+        }
+
+        .menu-view.active {
+            display: block;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .menu-header h1 {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+        }
+
+        .menu-header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .category-title {
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 22px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .menu-item {
+            background-color: #222228;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-name {
+            font-size: 0.98rem;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .item-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .menu-item.active .item-details {
+            max-height: 100px;
+            margin-top: 10px;
+        }
+
+        .btn-back {
+            display: block;
+            margin: 25px auto 0 auto;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="splash-screen" id="splashScreen" onclick="showMenu()">
+        <h2 class="splash-title">Bienvenidos</h2>
+        <p class="splash-subtitle">Menú elaborado por nuestros chefs</p>
+
+        <div class="chef-avatar-container">
+            <!-- AQUÍ VA TU IMAGEN DE LOS COCINEROS -->
+            <img src="PEGA_AQUÍ_EL_ENLACE_O_CÓDIGO_BASE64" alt="Nuestros Chefs">
+        </div>
+
+        <button class="btn-enter">Descubrir Menú</button>
+    </div>
+
+    <div class="menu-view" id="menuView">
+        <div class="menu-header">
+            <h1>Carta de Menú</h1>
+            <p>Toca cada opción para ver el detalle</p>
+        </div>
+
+        <div class="category-title">Entrante</div>
+        <div class="menu-item" onclick="toggleItem(this)">
+            <div class="item-header">
+                <span class="item-name">Pinxo de chistorra batida</span>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="item-details">
+                Textura cremosa de chistorra emulsionada servida sobre pan crujiente con un toque ahumado.
+            </div>
+        </div>
+
+        <div class="category-title">Plato Principal</div>
+        <div class="menu-item" onclick="toggleItem(this)">
+            <div class="item-header">
+                <span class="item-name">Chuleta de vaca Frisona (35 días)</span>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="item-details">
+                Corte seleccionado con 35 días de maduración para potenciar su ternura y sabor único a la brasa.
+            </div>
+        </div>
+
+        <div class="category-title">Postres</div>
+        <div class="menu-item" onclick="toggleItem(this)">
+            <div class="item-header">
+                <span class="item-name">Leche frita</span>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="item-details">
+                Receta tradicional cremosa aromatizada con canela y limón, empanada y frita al momento.
+            </div>
+        </div>
+        <div class="menu-item" onclick="toggleItem(this)">
+            <div class="item-header">
+                <span class="item-name">Concuño</span>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="item-details">
+                Especialidad dulce de la casa para poner el broche final a la experiencia.
+            </div>
+        </div>
+
+        <div class="category-title">Maridaje</div>
+        <div class="menu-item" onclick="toggleItem(this)">
+            <div class="item-header">
+                <span class="item-name">Botella de Azpilicueta</span>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="item-details">
+                Vino tinto D.O.Ca. Rioja, ideal para acompañar el intenso sabor de la carne madurada.
+            </div>
+        </div>
+        <div class="menu-item" onclick="toggleItem(this)">
+            <div class="item-header">
+                <span class="item-name">Cerveza Estrella Galicia sin alcohol</span>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="item-details">
+                Opción refrescante y ligera 0,0% manteniendo el carácter cervecero.
+            </div>
+        </div>
+
+        <button class="btn-back" onclick="showSplash()">← Volver a la portada</button>
+    </div>
+</div>
+
+<script>
+    function showMenu() {
+        document.getElementById('splashScreen').classList.add('hidden');
+        document.getElementById('menuView').classList.add('active');
+    }
+
+    function showSplash() {
+        document.getElementById('menuView').classList.remove('active');
+        document.getElementById('splashScreen').classList.remove('hidden');
+    }
+
+    function toggleItem(element) {
+        element.classList.toggle('active');
+    }
+</script>
+
+</body>
+</html>
